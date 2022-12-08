@@ -1,7 +1,6 @@
 var AWS = require('aws-sdk');
 AWS.config.update({region:'us-east-1'});
 var db = new AWS.DynamoDB();
-//new db??
 
 /* The function below is an example of a database method. Whenever you need to 
    access your database, you should define a function (myDB_addUser, myDB_getPassword, ...)
@@ -22,7 +21,6 @@ var myDB_getPassword = function(searchTerm, callback) {
   };
 
   db.query(params, function(err, data) {
-    console.log(data);
     if (err || data.Items.length == 0) {
       callback(err, null);
     } else {
@@ -55,8 +53,6 @@ var myDB_getUsername = function(searchTerm, language, callback) {
 
 //NEW
 //create a new account with the right db parameters
-
-//CHANGED myDB_createAccount
 var myDB_createAccount =
   function(newUsername, newPassword, newFullname, newAffiliation,
     newEmail, newBirthday, newInterest, newPfpURL, callback) {
@@ -69,6 +65,7 @@ var myDB_createAccount =
       + " " + newBirthday
       + " " + newInterest
       + " " + newPfpURL);
+
       var interestArr =[];
       for(let i = 0; i < newInterest.length; i++){
         var newIt =
@@ -93,7 +90,6 @@ var myDB_createAccount =
           "pfpURL": { S: newPfpURL }
         }
       };
-      console.log(params);
 
   db.putItem(params, function(err, data) {
     console.log(data);
@@ -109,33 +105,41 @@ var myDB_createAccount =
 var myDB_getFriends = (function(username, callback) {
   var params = {
   TableName: "users",
-    Key: {"username" : {S: username}},
-    ExpressionAttributeValues: "friends"
+    KeyConditions: {
+      username: {
+        ComparisonOperator: 'EQ',
+        AttributeValueList: [ { S: username } ]
+      }
+    },
+    TableName: "users",
+    AttributesToGet: [ 'friends' ]
   };
 
   db.query(params, function(err, data) {
     if(err) {
       console.log(err);
     } else {
-      callback(err, data.Items);
+      callback(err, data.Items[0].friends.L);
     }
   });
 });
 
 //NEW
-//outputs all restaurants from db into an array
+//outputs all posts from user into an array
 var myDB_allPosts = (function(userID, callback) {
   var params = {
-  TableName: "posts",
-    Key: {"userID" : {S: userID}}
+    TableName: "posts",
+    KeyConditionExpression: "userID = :a",
+    ExpressionAttributeValues: {
+      ":a": { S: userID }
+    }
   };
 
   db.query(params, function(err, data) {
-    console.log(data);
     if(err) {
       console.log(err);
     } else { //not sure if data.Items is all the items that has the key of userID???
-      data.Items.sort((a, b) => (a.timestamp.S).localeCompare(b.timestamp.S)).reverse();
+      // data.Items.sort((a, b) => (a.timepost.S).localeCompare(b.timepost.S)).reverse();
       callback(err, data.Items);
     }
   });
@@ -205,7 +209,170 @@ var myDB_updateInterest = function(username, newInterests, callback) {
     });
 }
 
+//creates post with the right db parameters
+var myDB_createPost = function(userID, content, timepost, callback) {
+  var params = {
+  TableName: "posts",
+    Item : {
+        "userID" : {
+          S: userID
+        },
+        "content": {
+          S: content
+        },
+        "timepost": {
+          S: timepost
+        },
+        "comments": {
+          L: []
+        },
+        "likes": {
+          L: []
+        }
+      }
+    };
 
+db.putItem(params, function(err, data) {
+  if (err) {
+  console.log(err);
+  }
+});
+}
+
+//adds comment in post using userID (partition key) and timepost (sort key)
+var myDB_addComment = function(userID, timepost, comment, callback) {
+  console.log("userID " + userID);
+  console.log("timepost " + timepost);
+  console.log("comment " + comment);
+  var paramsGet = {
+    TableName: 'posts',
+    KeyConditionExpression: 'userID = :a and timepost = :b',
+    ExpressionAttributeValues: {
+      ':a': { S: userID },
+      ':b': { S: timepost }
+    }
+  };
+
+  db.query(paramsGet, function(err, data) {
+    console.log("error :" + err);
+    console.log("data: " + data);
+    var tempArr = data.Items[0].comments.L;
+    var stringifyComment = {
+      S: comment
+    }
+
+    tempArr.push(stringifyComment);
+    console.log(tempArr);
+
+    var paramsUpdate = {
+      TableName: "posts",
+      Key : {
+        'userID' : {
+          S: userID
+        },
+        'timepost' : {
+          S: timepost
+        },
+      },
+      UpdateExpression: 'SET comments = :c',
+      ExpressionAttributeValues: {
+        ':c': { L: tempArr }
+      }
+    };
+
+    db.updateItem(paramsUpdate, function(err, data) {
+      if (err) {
+      console.log(err);
+      }
+    });
+  });
+}
+
+//NEW
+//outputs all walls from user into an array
+var myDB_allWalls = (function(receiver, callback) {
+  var params = {
+    TableName: "walls",
+    KeyConditionExpression: "receiver = :a",
+    ExpressionAttributeValues: {
+      ":a": { S: receiver }
+    }
+  };
+
+  db.query(params, function(err, data) {
+    if(err) {
+      console.log(err);
+    } else {
+      console.log("myDB_allWalls");
+      console.log(data.Items);
+      callback(err, data.Items);
+    }
+  });
+});
+
+//NEW
+///query as sender
+//outputs all walls as sender from user into an array
+var myDB_allWallsAsSender = (function(receiver, sender, callback) {
+  console.log("receiver");
+  console.log(receiver);
+  console.log("sender");
+  console.log(sender);
+  var params = {
+    TableName: "walls",
+    KeyConditionExpression: "receiver = :a",
+    FilterExpression: 'contains (sender, :b)',
+    ExpressionAttributeValues: {
+      ":a": { S: receiver },
+      ":b": { S: sender }
+    }
+  };
+
+  db.query(params, function(err, data) {
+    if(err) {
+      console.log(err);
+    } else {
+      console.log("data.Items");
+      console.log(data.Items);
+      callback(err, data.Items);
+    }
+  });
+});
+
+//creates wall with the right db parameters
+var myDB_createWall = function(receiver, sender, content, timepost, callback) {
+  var params = {
+  TableName: "walls",
+    Item : {
+        "receiver" : {
+          S: receiver
+        },
+        "sender" : {
+          S: sender
+        },
+        "content": {
+          S: content
+        },
+        "timepost": {
+          S: timepost
+        },
+        "comments": {
+          L: []
+        },
+        "likes": {
+          L: []
+        }
+      }
+    };
+
+db.putItem(params, function(err, data) {
+  if (err) {
+  console.log(err);
+  }
+});
+}
+
+//***************************************************** */
 
 
 //creates restaurant with the right db parameters
@@ -316,6 +483,11 @@ var database = {
   //NEW
   getAllPosts : myDB_allPosts,
   getFriends : myDB_getFriends,
+  createPost : myDB_createPost,
+  addComment : myDB_addComment,
+  getAllWalls : myDB_allWalls,
+  getAllWallsAsSender : myDB_allWallsAsSender,
+  createWall : myDB_createWall,
 
   updateEmail : myDB_updateEmail,
   updatePw : myDB_updatepw,
