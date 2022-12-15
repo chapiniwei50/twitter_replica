@@ -29,27 +29,22 @@ var getOnlineUsers = function (req, res) {
 				data1.forEach(function (r) {
 					friendsList.push(r);
 				});
-				//console.log("friend: " + friendsList);
 				chatdb.getOnlineUsers(function (err2, data2) {
 					if (err2) {
 						console.log(err2);
 					} else {
 						// data2: string set of userIDs	
 						data2Length = data2.length;
-						console.log(friendsList.includes("hello"));
 
 						data2.forEach(function (r) {
 							if (friendsList.includes(r)) {
 								var stringifyFriend = {
 									S: r
 								}
-								console.log("print");
-								console.log(stringifyFriend);
 								onlineFriends.push(stringifyFriend);
 							}
 							counter++;
 							if (data2Length === counter) {
-								console.log(onlineFriends);
 								res.json(onlineFriends);
 							}
 						});
@@ -60,16 +55,7 @@ var getOnlineUsers = function (req, res) {
 	}
 };
 
-var addOnlineUser = function (req, res) {
-	// Checks whether all fields are filled; if not, show warning message	
-	if (!req.session.username) {
-		res.render('main.ejs', { message: "Not logged in" });
-	} else {
-		chatdb.addUserOnline(req.session.username, function (err, data) {
-			if (err) { console.log(err); }
-		});
-	}
-}
+
 
 // Send user's chatroom info to chat page
 var getChatRooms = function (req, res) {
@@ -83,11 +69,8 @@ var getChatRooms = function (req, res) {
 			if (err1) {
 				console.log(err1);
 			} else {
-				console.log(data1);
 				// data1: list of all the user's chatrooms ids
 				data1.forEach(function (r) {
-					console.log("call getcharoom on db")
-					console.log(r);
 					chatdb.getChatroom(r, function (err2, data2) {
 						if (err2) {
 							console.log(err2);
@@ -108,7 +91,6 @@ var getChatRooms = function (req, res) {
 
 // Add a new instance of chatroom
 var addChatRoom = function (req, res) {
-	console.log("in add chatroom");
 	// info needed: timepost
 	if (!req.session.username) {
 		res.render('main.ejs', { message: "Not logged in" });
@@ -124,14 +106,12 @@ var addChatRoom = function (req, res) {
 			console.log(err);
 		}
 		else{
-			console.log("add chatroom");
 
 			chatdb.addChatIDToUser(req.session.username, chatID, function (err1, data1) {
 				if (err1) { 
 					console.log(err1); 
 				}
 				else{
-					console.log("add chat id to user success");
 					var response = {
 						"content":{S: []},
 						"chatID": {S: chatID},
@@ -165,11 +145,6 @@ var addMessage = function (req, res) {
 	// info needed from frontend: chat id, content
 	var chatID = req.body.chatID;
 	var content = req.body.message;
-	
-    console.log("content: ");
-    console.log(chatID);
-	console.log(content);
-
 	//message([timepost, userID, content])
 	var message = [req.session.username, content];
 
@@ -216,6 +191,70 @@ var deleteUserFromChatroom = function (req, res) {
 	}
 }
 
+var addOnlineUser = function (req, res) {
+	// Checks whether all fields are filled; if not, show warning message	
+	if (!req.session.username) {
+		res.render('main.ejs', { message: "Not logged in" });
+	} else {
+		chatdb.addUserOnline(req.session.username, function (err, data) {
+			if (err) { console.log(err); }
+			res.send({S : "added online user"});
+		});
+	}
+}
+
+// Invite user to a chat
+var inviteUser = function(req, res) {
+	var groupChatID = req.body.chatID;
+	var invitedUser = req.body.invitedUser;
+	if (!req.session.username) {
+		res.render('main.ejs', { message: "Not logged in" });
+	} else {
+		chatdb.addInvite(invitedUser, groupChatID, function(err, data) {
+			if (err) {
+				console.log(err);
+			}
+		});
+	}
+}
+
+// User rejects chat invite
+var rejectInvite = function(req, res) {
+	var groupChatID = req.body.chatID;
+	if (!req.session.username) {
+		res.render('main.ejs', { message: "Not logged in" });
+	} else {
+		chatdb.deleteInvite(req.session.username, groupChatID, function(err, data) {
+			if (err) {
+				console.log(err);
+			}
+		});
+	}
+}
+
+// User accepts chat invite
+var acceptInvite = function(req, res) {
+	var groupChatID = req.body.chatID;
+	if (!req.session.username) {
+		res.render('main.ejs', { message: "Not logged in" });
+	} else {
+		chatdb.deleteInvite(req.session.username, groupChatID, function(err1, data) {
+			if (err1) {console.log(err1);
+			} else {
+				chatdb.addChatIDToUser(req.session.username, groupChatID, function (err2, data) {
+					if (err2) {console.log(err2);
+					} else {
+						chatdb.addUserToChat(req.session.username, groupChatID, function (err3, data) {
+							if (err3) { console.log(err3) }
+						});
+					}
+				});
+			}
+		});
+	}
+}
+
+
 // Deletes session, userID from online db
 var logout = function (req, res) {
 	if (!req.session.username) {
@@ -232,6 +271,7 @@ var logout = function (req, res) {
 
 var routes = {
 	get_chat: getChat,
+	
 	get_online_users: getOnlineUsers,
 	get_chatrooms: getChatRooms,
 	add_online_user: addOnlineUser,
@@ -240,8 +280,11 @@ var routes = {
 	add_message: addMessage,
 	add_user_to_chat: addUserToChatroom,
 	delete_user_from_chat: deleteUserFromChatroom,
+	reject_invite: rejectInvite,
+	accept_invite: acceptInvite,
+	invite_user: inviteUser,
 
-	log_out: logout,
+	log_out: logout
 };
 
 module.exports = routes;
