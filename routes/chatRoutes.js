@@ -153,6 +153,7 @@ var addMessage = function (req, res) {
 	} else {
 		chatdb.addMessage(chatID, message, function (err, data) {
 			if (err) { console.log(err); }
+			res.send({S: "added message"});
 		});
 	}
 }
@@ -168,6 +169,7 @@ var addUserToChatroom = function (req, res) {
 			} else {
 				chatdb.addUserToChat(req.session.username, groupChatID, function (err, data) {
 					if (err) { console.log(err) }
+					res.send({S: "added user to chatroom"});
 				});
 			}
 		});
@@ -175,6 +177,7 @@ var addUserToChatroom = function (req, res) {
 }
 
 var deleteUserFromChatroom = function (req, res) {
+	console.log("deleteuserfromchat");
 	var groupChatID = req.body.chatID;
 	if (!req.session.username) {
 		res.render('main.ejs', { message: "Not logged in" });
@@ -185,6 +188,7 @@ var deleteUserFromChatroom = function (req, res) {
 			} else {
 				chatdb.deleteUserFromChat(req.session.username, groupChatID, function (err, data) {
 					if (err) { console.log(err) }
+					res.send({S: "deleted user from chatroom"});
 				});
 			}
 		});
@@ -214,20 +218,22 @@ var inviteUser = function(req, res) {
 			if (err) {
 				console.log(err);
 			}
+			res.send({S: "invited user to chatroom"});
 		});
 	}
 }
 
 // User rejects chat invite
-var rejectInvite = function(req, res) {
+var rejectInvite = function(req, res) {    
 	var groupChatID = req.body.chatID;
-	if (!req.session.username) {
+	if (!req.session.username)   {
 		res.render('main.ejs', { message: "Not logged in" });
 	} else {
 		chatdb.deleteInvite(req.session.username, groupChatID, function(err, data) {
 			if (err) {
 				console.log(err);
 			}
+			res.send({S: "rejected invite from user to chatroom"});
 		});
 	}
 }
@@ -246,6 +252,7 @@ var acceptInvite = function(req, res) {
 					} else {
 						chatdb.addUserToChat(req.session.username, groupChatID, function (err3, data) {
 							if (err3) { console.log(err3) }
+							res.send({S: "accepted invite for chatroom"});
 						});
 					}
 				});
