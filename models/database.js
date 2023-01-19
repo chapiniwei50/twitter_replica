@@ -2,11 +2,6 @@ var AWS = require('aws-sdk');
 AWS.config.update({ region: 'us-east-1' });
 var db = new AWS.DynamoDB();
 
-/* The function below is an example of a database method. Whenever you need to 
-   access your database, you should define a function (myDB_addUser, myDB_getPassword, ...)
-   and call that function from your routes - don't just call DynamoDB directly!
-   This makes it much easier to make changes to your database schema. */
-
 //gets username input and returns the password (this is just for one column)
 var myDB_getPassword = function (searchTerm, callback) {
   var params = {
@@ -51,7 +46,7 @@ var myDB_getUsername = function (searchTerm, language, callback) {
   });
 }
 
-//gets username input and returns the username if existing
+//gets username input and gives the entire user entity
 var myDB_userInfo = function (searchTerm, language, callback) {
   var params = {
     Key: {
@@ -71,32 +66,28 @@ var myDB_userInfo = function (searchTerm, language, callback) {
   });
 }
 
-//NEW
 //create a new account with the right db parameters
 var myDB_createAccount =
-  function (newUsername, newPassword, newFullname, newAffiliation,
-    newEmail, newBirthday, newInterest, newPfpURL, callback) {
+  function (newUsername, newPassword, newFullname,
+    newEmail, newBirthday, callback) {
 
-    var interestArr = [];
-    for (let i = 0; i < newInterest.length; i++) {
-      var newIt =
-      {
-        "S": newInterest[i]
-      }
-      interestArr.push(newIt);
-    }
+   
+
+    console.log(newUsername);
+    console.log(newPassword);
+    console.log(newFullname);
+    console.log(newEmail);
+    console.log(newBirthday);
 
     var params = {
       TableName: "users",
       Item: {
         "username": { S: newUsername },
-        "affiliation": { S: newAffiliation },
+
         "birthday": { S: newBirthday },
         "email": { S: newEmail },
         "fullname": { S: newFullname },
-        "interest": { L: interestArr },
         "password": { S: newPassword },
-        "pfpURL": { S: newPfpURL }
       }
     };
 
@@ -107,7 +98,6 @@ var myDB_createAccount =
     });
   }
 
-//NEW
 //outputs friends
 var myDB_getFriends = (function (username, callback) {
   var params = {
@@ -125,7 +115,7 @@ var myDB_getFriends = (function (username, callback) {
     if (err) {
       console.log(err);
     } else {
-      if(data.Items[0].friends == undefined) {
+      if(data.Items[0] == undefined || data.Items[0].friends == undefined) {
         var empty = [];
         callback(err, empty);
       } else {
@@ -135,7 +125,6 @@ var myDB_getFriends = (function (username, callback) {
   });
 });
 
-//NEW
 //outputs all posts from user into an array
 var myDB_allPosts = (function (userID, callback) {
   var params = {
@@ -197,30 +186,6 @@ var myDB_updatepw = function (username, newPw, callback) {
     }
   });
 }
-
-// Update user interest. Minimum 2???
-//client side has the list of interests => newInterests is final interests
-// var myDB_updateInterest = function (username, newInterest1, newInterest2, newInterest3, callback) {
-//   var newInterests = [];
-//   newInterests = [newInterest1, newInterest2, newInterest3]
-//   var params = {
-//     TableName: "users",
-//     Item: {
-//       'username': { S: username },
-//       'interest': { S: newInterests },
-//     }
-//   };
-
-//   db.putItem(params, function (err, data) {
-//     if (err) {
-//       callback(err, null);
-//     } else if (username.length == 0 || newPw.length == 0) {
-//       callback("Field cannot be left blank", null);
-//     } else {
-//       callback(err, "Updated");
-//     }
-//   });
-// }
 
 //creates post with the right db parameters
 var myDB_createPost = function (userID, content, timepost, callback) {
@@ -333,7 +298,6 @@ var myDB_addComment = function (userID, timepost, comment, table, callback) {
   });
 }
 
-//NEW
 //outputs all walls from user into an array
 var myDB_allWalls = (function (receiver, callback) {
   var params = {
@@ -353,7 +317,6 @@ var myDB_allWalls = (function (receiver, callback) {
   });
 });
 
-//NEW
 ///query as sender
 //outputs all walls as sender from user into an array
 var myDB_allWallsAsSender = (function (receiver, sender, callback) {
@@ -431,61 +394,10 @@ var myDB_updateUser = function (username, variable, columnName, callback) {
   });
 }
 
-var myDB_updateInterest = function (username, newInterest1, newInterest2, newInterest3, callback) {
-  var interestArr = [];
-  interestArr = [newInterest1, newInterest2, newInterest3];
-
-  var paramsUpdate = {
-    Key: {
-      "username": { S: username }
-    },
-    UpdateExpression: 'SET interest = :c',
-    ExpressionAttributeValues: {
-      ':c': { L: interestArr }
-    },
-    TableName: "users",
-  };
 
 
-  db.updateItem(paramsUpdate, function (err, data) {
-    if (err) {
-      console.log("error: " + err);
-    } else {
-      var paramsGet = {
-        KeyConditions: {
-          username: {
-            ComparisonOperator: 'EQ',
-            AttributeValueList: [{ S: username }]
-          }
-        },
-        TableName: 'users',
-        AttributesToGet: ['interest']
-      };
 
-      db.query(paramsGet, function (err, data) {
-        callback(err, data.Items[0].interest.L);
-      });
-    }
-  });
-}
-
-var myDB_getInterest = function (username, callback) {
-  var paramsGet = {
-    KeyConditions: {
-      username: {
-        ComparisonOperator: 'EQ',
-        AttributeValueList: [{ S: username }]
-      }
-    },
-    TableName: 'users',
-    AttributesToGet: ['interest']
-  };
-
-  db.query(paramsGet, function (err, data) {
-    callback(err, data.Items[0].interest.L);
-  });
-}
-
+//get all the available user ids
 var myDB_getAllUsername = (function (callback) {
   var params = {
     TableName: "users",
@@ -559,7 +471,7 @@ var myDB_addFriend = function(user1, user2, callback) {
 	});
 }
 
-
+//add likes to the db with a string set of usernames (the size of the string set becomes the number of likes)
 var myDB_addLike = function(userID, likedUser, timepost, postType, callback) {
 	var userStringSet = {SS: [likedUser]};
   console.log(userID);
@@ -666,68 +578,146 @@ var myDB_deleteFriend = function(username, friend, callback) {
   });
 }
 
-// Updates user's affiliation
-var myDB_addToAff = function(userID, updatedAffiliation, callback) {
-	var newUserIDSet = {SS: [userID]};
-	console.log("updated affil: " + updatedAffiliation);
-	var params = {
-		TableName: "affiliations",
-		Key: {"affiliations" : {S: updatedAffiliation}},
-	    UpdateExpression: "ADD users :new",
-	    ExpressionAttributeValues : {
-	      ":new": newUserIDSet
-	    },
-	    //ConditionExpression: "attribute_exists(affiliations)",
-	}
-	db.updateItem(params, function(err, data) {
-	    if (err) {
-	      console.log("Error", err);
-	    }
-		callback(err, data);
-	});
+var myDB_addHashtagPost = function (userID, timepost, hashtag, callback) {
+  console.log("addhashtag")
+  var paramsGet;
+
+    paramsGet = {
+      TableName: "hashtags",
+      KeyConditionExpression: 'hashtag = :a',
+      ExpressionAttributeValues: {
+        ':a': { S: hashtag },
+      }
+    };
+  
+
+  db.query(paramsGet, function (err, data) {
+    var tempArr = [];
+    if(data.Items[0] != null) {
+      console.log(data);
+      tempArr = data.Items[0].posts.L;
+    }
+    else{
+
+      var postID = userID+" "+timepost;
+    var stringifyPost = {
+      S: postID
+    }
+     
+      var arr = [];
+      arr.push(stringifyPost);
+
+      var params = {
+        TableName: "hashtags",
+        Item: {
+          "hashtag": {
+            S: hashtag
+          },
+          "posts": {
+            L: arr
+          }
+        }
+      };
+
+
+      db.putItem(params, function (err, data) {
+        if (err) {
+          console.log(err);
+        }
+      });
+    }
+
+    var postID = userID+" "+timepost;
+    var stringifyPost = {
+      S: postID
+    }
+
+    tempArr.push(stringifyPost);
+
+    var paramsUpdate;
+    
+      paramsUpdate = {
+        TableName: "hashtags",
+        Key: {
+          'hashtag': {
+            S: hashtag
+          }
+        },
+        UpdateExpression: 'SET posts = :c',
+        ExpressionAttributeValues: {
+          ':c': { L: tempArr }
+        }
+      };
+    
+
+    db.updateItem(paramsUpdate, function (err, data) {
+      if (err) {
+        console.log(err);
+      }
+    });
+  });
 }
 
-// Outputs user's affiliation
-var myDB_getUserAffil = function (username, callback) {
+var myDB_getHashtag = function (hashtag, callback) {
+  console.log("getHashtag");
+  console.log(hashtag);
   var params = {
-    TableName: "users",
-    Key: {"username" : {S: username}},
-    AttributesToGet: ['affiliation'],
+    TableName: "hashtags",
+    Key: {"hashtag" : {S: hashtag}},
+    AttributesToGet: ['posts'],
   };
 
   db.getItem(params, function(err, data) {
     if (err) {
       console.log("Error" + err);
     } else {
-      callback(null, data.Item.affiliation.S);
+      if(data.Item != null){
+        console.log(data);
+      var postsArr = data.Item.posts.L;
+      //  callback(null, data.Item.posts.L);
+       console.log(postsArr);
+       var tempArr =[];
+       for(let i = 0; i < postsArr.length; i++){
+
+          var temp = (postsArr[i].S).split(" ");
+          console.log("timepost and userID");
+          console.log(temp);
+          var params = {
+        TableName: "posts",
+        KeyConditionExpression: 'userID = :a and timepost = :b',
+      ExpressionAttributeValues: {
+        ':a': { S: temp[0] },
+        ':b': { S: temp[1] }
+      }
+      };
+      db.query(params, function (err, data) {
+          if (err) {
+            console.log(err);
+          } else { 
+            
+            tempArr.push(data.Items[0]);
+            if(i == postsArr.length-1){
+              callback(err, tempArr);
+            }
+            
+           
+          }
+        });
+
+       }
+       
+     
+
+     
+      }
+      
     }
   });
 }
 
-// Gets a list of all the user's affiliation friends
-var myDB_getAffiliations = function(affiliations, callback) {
-  var params = {
-      TableName: "affiliations",
-      Key: {"affiliations" : {S: affiliations}},
-  };
-
-  db.getItem(params, function(err, data) {
-    if (err) {
-      console.log("Error" + err);
-    } else {
-      callback(null, data.Item.users.SS);
-    }
-  });
-}
 
 
-// TODO Your own functions for accessing the DynamoDB tables should go here
 
-/* We define an object with one field for each method. For instance, below we have
-   a 'lookup' field, which is set to the myDB_lookup function. In routes.js, we can
-   then invoke db.lookup(...), and that call will be routed to myDB_lookup(...). */
-
-// TODO Don't forget to add any new functions to this class, so app.js can call them. (The name before the colon is the name you'd use for the function in app.js; the name after the colon is the name the method has here, in this file.)
 
 var database = {
   passwordLookup: myDB_getPassword,
@@ -747,18 +737,16 @@ var database = {
   getAllWallsAsSender: myDB_allWallsAsSender,
   createWall: myDB_createWall,
   getUserInfo: myDB_userInfo,
-  getInterest: myDB_getInterest,
   getAllUsername: myDB_getAllUsername,
 
   updateEmail: myDB_updateEmail,
   updatePw: myDB_updatepw,
-  updateInterest: myDB_updateInterest,
   updateUser: myDB_updateUser,
   deleteFriend: myDB_deleteFriend,
+//hashtag
+addHashtag: myDB_addHashtagPost,
+getHashtag: myDB_getHashtag
 
-  updateAffiliation: myDB_addToAff,
-  getAffiliations: myDB_getAffiliations,
-  getUserAffiliation: myDB_getUserAffil,
 
 };
 

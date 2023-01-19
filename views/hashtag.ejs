@@ -4,7 +4,7 @@
 <head>
   <link rel="icon" type="image/x-icon" href=
   "https://icons8.com/icon/L2zv2Zo2qmbx/twitter">
-  <title>HomePage</title>
+  <title>Explore Hashtags</title>
   <% if (check) { %>
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -18,24 +18,7 @@
         font-family: Arial, Helvetica, sans-serif;
         font-weight: 600;
       }
-      .like{
-        margin-top: 22px;
-        margin-left: 10px;
-      }
-
-      .friendRequest {
-        text-align: center;
-        border-radius: 10px;
-        width: 300px;
-        height: 400px;
-        padding: 20px;
-        top: 20px;
-        left: 20px;
-        margin-top: 30px;
-        margin-left: 50px;
-        background-color: #ffffff;
-      }
-      .commentBar{
+      #commentBar{
         border-radius: 10px;
         width: 500px;
         padding: 20px;
@@ -44,27 +27,14 @@
         display:flex;
        
       }
+      .likesection {
+        display: flex;
+        color: white;
+      }
 
-      @media only screen and (max-width: 600px) {
-  /* For tablets: */
-  .commentBar {width: 80%;
-        }
-
-      
-}
-
-
-      .friendList {
-        text-align: center;
-        border-radius: 10px;
-        width: 300px;
-        height: 400px;
-        padding: 20px;
-        top: 20px;
-        left: 20px;
-        margin-top: 30px;
-       
-        background-color: #ffffff;
+      .like{
+        margin-top: 22px;
+        margin-left: 10px;
       }
       button[type=like] {
      
@@ -77,57 +47,74 @@
      display: inline-block;
    }
 
-   button[type=accept] {
-     
-     
-     background-color: white;
-     color: #fff;
-     border-radius: 10px;
-     border: 0;
-     box-shadow:0;
-     display: inline-block;
-   }
-   button[type=reject] {
-     
-     
-     background-color: #cf3030;
-     color: #fff;
-     border-radius: 30px;
-     border: 0;
-     box-shadow:0;
-     display: inline-block;
-   }
-
-      .wholeHome {
-        display: flex;
+   textarea.comment {
+        /* padding: 10px 0px;
+        margin-left: 450px;
+        margin-top: 10px;
+        margin-right: 0px;
+        border-radius: 10px; */
+        border-radius: 10px;
+        width: 500px;
+        padding: 10px;
+        margin-left: auto;
+        margin-right: auto;
+        margin-bottom: 5px;
+        margin-top: 5px;
+        box-sizing: border-box;
+        color: #585858;
+        border: 1px solid #F5F5F5;
+        font-size: 16px;
+        letter-spacing: 1px;
+        height: 40px !important;
+        width: 420px;
+        display: inline-block;
       }
 
-      .likesection {
-        display: flex;
-        color: white;
+      textarea:focus {
+        -moz-box-shadow: none !important;
+        -webkit-box-shadow: none !important;
+        box-shadow: none !important;
+        border: 1px solid #ffffff !important;
+        outline-width: 0 !important;
       }
+
+
+      
 
       .card {
-        border-radius: 20px;
+        border-radius: 10px;
         width: 500px;
         padding: 20px;
-        margin-left: auto;
+        margin-left: 80px;
         margin-right: auto;
         margin-bottom: 30px;
         margin-top: 30px;
+        
         background-color: #ffffff;
       }
 
-      @media only screen and (max-width: 600px) {
-  /* For tablets: */
-  .card {width: 80%;
-        }
-
-      
-}
-
-
-
+      .profile {
+        text-align: center;
+        border-radius: 10px;
+        width: 300px;
+        height: 400px;
+        padding: 20px;
+        top: 20px;
+        left: 20px;
+        margin-top: 30px;
+        margin-left: 50px;
+        background-color: #ffffff;
+      }
+      .whole{
+        display:flex;
+      }
+      .wallPic {
+        width: 150px;
+        height: 150px;
+        object-fit: contain;
+        background-color: #E0E0E0;
+        display: inline-block;
+      }
 
       .post {
         border-radius: 10px;
@@ -138,6 +125,16 @@
         margin-bottom: 0px;
         margin-top: 30px;
         background-color: #5e97dc;
+      }
+
+      .commentBar{
+        border-radius: 10px;
+        width: 500px;
+        padding: 20px;
+        margin-left: auto;
+        margin-right: auto;
+        display:flex;
+       
       }
 
       .comments {
@@ -152,19 +149,9 @@
         border-width: 10px;
         background-color: #ffffff;
       }
-      @media only screen and (max-width: 600px) {
-      .post {
-       
-       width: 80%;
-     
-     
-     }
-     .comments{
-       width: 80%;
-     }
-    }
+
       /* post */
-      .userPost {
+      .user {
         font-size: 20px;
         padding-right: 10px;
         padding-left: 10px;
@@ -194,14 +181,10 @@
         width: 60px;
         height: 60px;
         border-radius: 50%;
-        margin-left: auto;
-        margin-right: auto;
         object-fit: contain;
         background-color: #E0E0E0;
-
+        display: inline-block;
       }
-
-
 
       .profile-pic-nav {
         float: left;
@@ -223,38 +206,7 @@
         padding-left: 20px;
       }
 
-      textarea.posttext {
-        padding: 10px 10px;
-        border-radius: 10px;
-        box-sizing: border-box;
-        color: #000000;
-        border: 1px solid #F5F5F5;
-        font-size: 16px;
-        letter-spacing: 1px;
-        height: 200px;
-        width: 100%;
-      }
-
-      textarea.comment {
      
-        border-radius: 10px;
-        box-sizing: border-box;
-        color: #585858;
-        border: 1px solid #F5F5F5;
-        font-size: 16px;
-        letter-spacing: 1px;
-        height: 40px !important;
-        width: 420px;
-        display: inline-block;
-      }
-
-      textarea:focus {
-        -moz-box-shadow: none !important;
-        -webkit-box-shadow: none !important;
-        box-shadow: none !important;
-        border: 1px solid #ffffff !important;
-        outline-width: 0 !important;
-      }
 
       select {
         border: none;
@@ -314,17 +266,25 @@
       .topnav a:hover {
         background-color: #d1d1d1;
         color: black;
-        border-radius: 30px;
       }
 
       .topnav a.active {
         background-color: #0668E1;
         color: rgb(255, 255, 255);
-        border-radius: 30px;
       }
 
       .topnav .search-container {
         float: right;
+      }
+      
+      .searchHash{
+        margin-left:auto;
+        margin-right:auto;
+        padding: 6px;
+        margin-top: 50px;
+        font-size: 20px;
+        border: none;
+
       }
 
       .topnav input[type=text] {
@@ -375,42 +335,39 @@
         -webkit-appearance: none;
         padding-left: 10px;
         padding-right: 10px;
-        padding-top: 20px;
-        text-align: top;
-        border: 0;
-        box-shadow: 0 0 15px 4px rgba(0, 0, 0, 0.06);
-        background-color: #0668E1;
-        color: #fff;
-        border-radius: 5px;
-        display: inline-block;
-      }
-
-      button[type=invite] {
-        appearance: none;
-        -webkit-appearance: none;
-        padding-left: 10px;
-        padding-right: 10px;
-        margin-left: 5px;
-        text-align: top;
-        border: 0;
-        box-shadow: 0 0 15px 4px rgba(0, 0, 0, 0.06);
-        background-color: #0668E1;
-        color: #fff;
-        border-radius: 5px;
-        display: inline-block;
-      }
-
-      button[type="accept-invite"] {
-        appearance: none;
-        -webkit-appearance: none;
       
-        
         text-align: top;
         border: 0;
-       
-        background-color: #efefef;
+        box-shadow: 0 0 15px 4px rgba(0, 0, 0, 0.06);
+        background-color: #0668E1;
         color: #fff;
+        border-radius: 5px;
+        display: inline-block;
+      }
+
+      button[type=addfriend] {
+        appearance: none;
+        -webkit-appearance: none;
        
+        text-align: top;
+        border: 0;
+        box-shadow: 0 0 15px 4px rgba(0, 0, 0, 0.06);
+        background-color: #04c74f;
+        color: #fff;
+        border-radius: 5px;
+        display: inline-block;
+      }
+
+      button[type=removefriend] {
+        appearance: none;
+        -webkit-appearance: none;
+       
+        text-align: top;
+        border: 0;
+        box-shadow: 0 0 15px 4px rgba(0, 0, 0, 0.06);
+        background-color: #ca4230;
+        color: #fff;
+        border-radius: 5px;
         display: inline-block;
       }
 
@@ -425,12 +382,7 @@
         color: #fff;
         border-radius: 5px;
       }
-
-
-
-      
     </style>
-
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js">
     </script>
     <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
@@ -438,45 +390,39 @@
     <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
     <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
 
-    <script type="text/javascript">
-      var sessionCreator = "";
+   
 
-      var globalPostList = [];
+      <script type="text/javascript">
+        var sessionCreator = "";
+        var wallOwner = "";
+       
+        window.onload = function () {
 
-     
-    
-     
-      window.onload = function () {
-         getFriendsPosts();
-  
-      }
 
-      var refreshTime = function () {
-        getFriendsPosts();
-        setTimeout(refreshTime, 3000);
-      };
-      $(document).ready(function () {
-        setTimeout(refreshTime, 3000);
-      });
-     
+          const urlParams = new URLSearchParams(window.location.search);
+          const hashTagResult = urlParams.get('searchHash');
+          console.log("search results: ");
+          console.log(hashTagResult);
 
-    
-      //calls ajax with /getList that retreives restaraut data from db
-      function getFriendsPosts() {
-        var friendposts = [];
+          if(hashTagResult!=null){
+            $.ajax({
+              type: "POST",
+              url: "/getHashtag",
+              data: {
+                hashtag: hashTagResult
+              },
 
-        $(document).ready(function () {
+              success: function (result) {
+               console.log(result);
 
-          $.getJSON('/getPostAjax', function (elementsArr) {
-
-            for (let i = 0; i < elementsArr.length; i++) {
-              var contentN = elementsArr[i].content;
-              var userIDN = elementsArr[i].userID;
-              var timepostN = elementsArr[i].timepost;
-              var likesN = elementsArr[i].likes;
-              var commentsN = elementsArr[i].comments;
-              var postTypeN = elementsArr[i].postType;
-              var likesCount =elementsArr[i].likes;
+               for (let i = 0; i < result.length; i++) {
+              var contentN = result[i].content;
+              var userIDN = result[i].userID;
+              var timepostN = result[i].timepost;
+              var likesN = result[i].likes;
+              var commentsN = result[i].comments;
+              var postTypeN = result[i].postType;
+              var likesCount =result[i].likes;
               var Item =
               {
                 "content": contentN,
@@ -487,105 +433,78 @@
                 "postType": postTypeN,
                 "likesCount" : likesCount
               };
-              friendposts.push(Item);
-          
+             createPostDiv(Item)
           
             }
+               
+              
+              },
+              error: function (result) {
+                alert('No Result');
+              }
+            });
+          }
+          
+         
            
 
+        }
 
-
-            // A comparer used to determine if two entries are equal.
-            const isSame = (a, b) =>
-            a.userID === b.userID 
-            && a.timepost === b.timepost;
-
-            // Get items that only occur in the left array,
-            // using the compareFunction to determine equality.
-            const onlyInLeft = (left, right, compareFunction) =>
-              left.filter(leftValue =>
-                !right.some(rightValue =>
-                  compareFunction(leftValue, rightValue)));
-
-            var difference = onlyInLeft(friendposts, globalPostList, isSame);
-          
-
-          
-
-            for (let i = difference.length - 1; i >= 0; i--) {
-              createPostDiv(difference[i]);
-            };
-            globalPostList = friendposts;
-          });
-        });
-      }
-
-
-      function tagUsernames(availableTags) {
-        $(function () {
-          $("#search").autocomplete({
-            source: availableTags
-          });
-        });
-      }
-      function createPostDiv(friendpost) {
-       
+        function createPostDiv(friendpost) {
+        console.log(friendpost)
+        
 
         test_el = document.createElement('div');
-        var test = new Date(parseInt(friendpost.timepost));
+        var test = new Date(parseInt(friendpost.timepost.S));
         var time = (new Date(test)).toLocaleDateString()
           +
           " "
           +
           (new Date(test)).toLocaleTimeString();
-          var likeID =   "like-btn-"+ friendpost.userID.split(" ").join("") + "-" + friendpost.timepost
-          var likeCount = "like-cnt-"+ friendpost.userID.split(" ").join("") + "-" + friendpost.timepost
+          var likeID =   "like-btn-"+ friendpost.userID.S.split(" ").join("") + "-" + friendpost.timepost
+          var likeCount = "like-cnt-"+ friendpost.userID.S.split(" ").join("") + "-" + friendpost.timepost
         test_el.innerHTML =
           '<div class="post"><div class= "userPost">'
-          + friendpost.userID +
+          + friendpost.userID.S +
           '</div>' +
           '<div class="time" >'
           + time +
           '</div>' +
           '<div class="content" >'
-          + friendpost.content +
-          '</div>'+
-          '<div class = "likesection">'
-          +'<button type="like"  id='+likeID+'>'
-         +' <img src="https://img.icons8.com/material-outlined/24/FFFFFF/hearts.png"/></button>'+
-         '<div class="like" id ='+likeCount+'>'+friendpost.likesCount+'</div></div>'
+          + friendpost.content.S +
+          '</div>'
          +'</div>'
        
 
-        var commentsArr = (friendpost.comments).map(obj => obj.S);
+        var commentsArr = (friendpost.comments.L).map(obj => obj.S);
         for (let i = 0; i < commentsArr.length; i++) {
           test_el.innerHTML +=
             '<div class="comments" >'
             + commentsArr[i] +
             '</div>';
         }
-        var commentID = "comment-button-" + friendpost.userID.split(" ").join("") + "-" + friendpost.timepost;
+        var commentID = "comment-button-" + friendpost.userID.S.split(" ").join("") + "-" + friendpost.timepost.S;
         
-        var commentBarID = "comment-bar-" + friendpost.userID.split(" ").join("") + "-" + friendpost.timepost
-        var commentContent = "commentcontent-" + friendpost.userID.split(" ").join("") + "-" + friendpost.timepost
+        var commentBarID = "comment-bar-" + friendpost.userID.S.split(" ").join("") + "-" + friendpost.timepost.S
+        var commentContent = "commentcontent-" + friendpost.userID.S.split(" ").join("") + "-" + friendpost.timepost.S
         test_el.innerHTML +=
           '<div class = "commentBar" id = ' + commentBarID + '><textarea class="comment" placeholder="say something..." name=' + commentContent + '></textarea>'
           +
           '<button type = "comment" id = ' + commentID + '>Comment</button></div>'
         document.body.appendChild(test_el);
-        var cardDiv = document.getElementById('wholeHome');
+        var cardDiv = document.getElementById('whole');
         cardDiv.after(test_el);
-        commentButtons(commentID, commentContent, friendpost.timepost, friendpost.userID, commentBarID, friendpost.postType);
-        likeButton( friendpost.userID, friendpost.postType, friendpost.timepost);
+        commentButtons(commentID, commentContent, friendpost.timepost.S, friendpost.userID.S, commentBarID, friendpost.postType.S);
+       
       }
-    
 
       function likeButton( userID, postType, timepost) {
         var hashlikeID =   "#like-btn-"+ userID.split(" ").join("") + "-" + timepost
         var likeID ="like-btn-"+ userID.split(" ").join("") + "-" + timepost
         $(document).ready(function () {
           $(hashlikeID).click(function (e) {
-           
+            console.log("like clicked!");
+            console.log(hashlikeID);
             e.preventDefault();
 
             $.ajax({
@@ -598,7 +517,7 @@
               },
 
               success: function (result) {
-              
+               console.log(result);
                var string = "like-cnt-"+ userID.split(" ").join("") + "-" + timepost;
 
                document.getElementById(string).innerHTML= result.S;
@@ -616,11 +535,12 @@
 
         });
       }
+
       function commentButtons(commentIDBefore, commentCon, time, postUserID, commentBarID, postType) {
         $(document).ready(function () {
           commentID = "#" + commentIDBefore;
           $(commentID).click(function (e) {
-           
+            console.log("comment clicked!");
             e.preventDefault();
             var contentUpd = document.getElementsByName(commentCon)[0].value;
             document.getElementsByName(commentCon)[0].value = "";
@@ -641,7 +561,7 @@
               success: function (result) {
 
 
-     
+                console.log(result);
 
                 test_el = document.createElement('div');
                 test_el.innerHTML +=
@@ -663,136 +583,25 @@
           });
         });
       }
-
-      $(document).ready(function () {
-        $.getJSON('/getCreator', function (creator) {
-          sessionCreator = creator;
-       
-          $("#currUser").html(sessionCreator);
-    
-        });
-      });
-
-      $(document).ready(function () {
-        $.getJSON('/getAllUsername', function (usernameArr) { 
-          var tagArr = usernameArr.map(obj => obj.username.S);
-          tagUsernames(tagArr);
-        });
-      });
-    </script>
-    <script>
-      $(document).ready(function () {
-        $("#post-button").click(function (e) {
-         
-          e.preventDefault();
-          var contentUpd = document.getElementsByName("postcontent")[0].value;
-          document.getElementsByName("postcontent")[0].value = "";
-          var timeposted =  new Date().getTime()
-          $.ajax({
-            type: "POST",
-            url: "/createpost",
-            data: {
-              content: contentUpd,
-              userID: sessionCreator,
-              timepost: timeposted
-            },
-            success: function (result) {
-             
-              var Item =
-              {
-                "content": result.content,
-                "comments": [],
-                "likes": [],
-                "userID": result.userID,
-                "timepost": result.timepost,
-              };
-              var hashtagArr =[];
-            
-              hashtagArr = contentUpd.split(' ').filter(v=> v.startsWith('#')).filter(v => v != "#")
-           
-              for(let i = 0; i < hashtagArr.length; i++){
-                hashtagExist(hashtagArr[i], sessionCreator, timeposted);
-              }
-              
-
-              
-            },
-            error: function (result) {
-            
-              alert('create post error');
-            }
-          });
-          
-         
-
-        });
-      });
-
      
-      function hashtagExist( hashtagN, userIDN, timepostN) {
-       
-        $.ajax({
-              type: "POST",
-              url: "/addHashtag",
-              data: {
-                hashtag: hashtagN,
-                userID: userIDN,
-                timepost: timepostN
-              },
-              success: function (result) {
-               
-              },
-              error: function (result) {
-                alert('add hashtag error');
-              }
-            });
-
-       
-      }
-    </script>
-    <!-- CHAT -->
-    <script>
-
-
-      $(document).ready(function () {
-        $.getJSON('/getCreator', function (creator) {
-          id = creator;
-         
-          $("#currUser").html(id);
-        });
-
-      });
-
-     
-      
-
-    </script>
-
-    
-
- 
-   
-
-    <% } else { %>
-      <script>
-        alert("login required")
       </script>
-      <meta http-equiv="refresh" content="1; url='/'" />
-      <% } %>
-
-
+     
+         
+          <% } else { %>
+            <script>
+              alert("login required")
+            </script>
+            <% } %>
 </head>
 
 <body>
-
-
   <div class="topnav">
-
-    
+    <div id = "navpicdiv">
+    </div>
     <a href="/homepage"><img src="https://img.icons8.com/ios-filled/30/000000/twitter.png"/></a>
-    <a class="active" href="/homepage">Home</a>
-    <a  href="/wall">Profile</a>
-    <a href="/hashtag"># Explore</a>
+    <a href="/homepage">Home</a>
+    <a href="/wall">Profile</a>
+    <a class="active" href="/hashtag"># Explore</a>
     <a href="/logout">Logout</a>
 
     <div class="search-container">
@@ -802,43 +611,23 @@
           <button type="submit" id="search-btn">
             <i class="fa fa-search"></i>
           </button>
+          </form>
       </div>
     </div>
   </div>
-
- 
-
-
-
-
-  <div id="wholeHome" class="wholeHome">
- 
-
-    <div class="card" id="cardID">
-
-      <div class="userInfo">
-        <div id="profilepicurl">
-        </div>
-          <h3>
-          <div id="currUser"></div>
-        </h3>
+  <div id = "whole" class = "whole">
+    <div class="searchHash">
+      <div class="ui-widget">
+        <form action="/hashtag" method="get">
+          <input type="text" placeholder="Explore Hashtags.." name="searchHash" id="searchHash">
+          <button type="submit" id="search-btn">
+            <i class="fa fa-search"></i>
+          </button>
+          </form>
       </div>
-      <div class="row px-3 form-group">
-        <textarea class="posttext" placeholder="what's happening?" name="postcontent"></textarea>
-      </div>
-      <button type="post" id="post-button">Post</button>
     </div>
-
-
-  </div>
-
-
-
-
-
  
-
-  </div>
-
+</div>
+</body>
 
 </html>
