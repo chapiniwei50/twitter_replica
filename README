@@ -1,57 +1,27 @@
-Group Members: Cindy Wei, Matt Park, Alex Park, Sarah Zhang
-SEAS login: weicindy, mtp0326, 
-
-Which features did you implement? 
-  (list features, or write 'Entire assignment')
-  user registration
-  account changes
-  walls 
-user search 
-  home page
-  commmenting
-  search
-  friends
-  visualizer
-  dynamic cotent
-  chat invites
-  chat messages persistance
-  group chat
-  chat ordering
-news feed
-feed upates
-news recommendation
-news search
-interfacing with the web application
-hashing password for security
-extra credit:
-users can accept or deny friend requests
-Profile picture
-notifications
-infinite scrolling(chat box)
-
-Instructions on running our project:
-node modules is deleted for submission, must include node modules files. 
-Run the commands on the terminal:
-
-for spark:
-- mvn clean
-- mvn compille
-- mvn exec:java@livy.
-to start the website:
-- cd git
-- cd minifb
-- node app.js
+Brief summary of what your project does
+- It's a replica of twitter where users are allowed to register for an account, log in, log out, search up users, follow and unfollow other users, post posts on their homepage, like a post, filter tweets with hashtags, find posts with a certain hashtag
+Which features you chose to include
+- register for an account
+- login/logout
+- users profile pages
+- search users
+- search hashtags
+- follow/unfollow users
+- tweet posts
+- like a post
+- uses components
+- mobile responsive
+- API calls (aws)
+How much time you spent developing this project
+- 7hrs
+What features you weren’t able to complete and how you would complete them
+- none that was listed
+Details for running your project — choose one of the following
+- youtube video link:
+  - demo of functions:
+  https://youtu.be/Buu4-gmivZ4
+  - demo of mobie responsiveness:
+  https://youtu.be/DoFNYsf5yi8
 
 
-Did you personally write _all_ the code you are submitting
-(other than code from the course web page)?
-  [*] Yes
-  [ ] No
 
-Did you copy any code from the Internet, or from classmates?
-  [ ] Yes
-  [*] No
-
-Did you collaborate with anyone on this assignment?
-  [ ] Yes
-  [*] No
